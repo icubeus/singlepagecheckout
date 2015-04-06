@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Icube_Singlepagecheckout>
+            <version>0.1.0</version>
+        </Icube_Singlepagecheckout>
+    </modules>
+    <global>
+        <blocks>
+            <singlepagecheckout>
+                <class>Icube_Singlepagecheckout_Block</class>
+            </singlepagecheckout>
+        </blocks>
+        <helpers>
+            <singlepagecheckout>
+                <class>Icube_Singlepagecheckout_Helper</class>
+            </singlepagecheckout>
+        </helpers>
+        <models>
+            <singlepagecheckout>
+                <class>Icube_Singlepagecheckout_Model</class>
+            </singlepagecheckout>
+        </models>
+    </global>
+    <frontend>
+        <layout>
+            <updates>
+                <singlepagecheckout module="Icube_Singlepagecheckout">
+                    <file>icube/singlepagecheckout.xml</file>
+                </singlepagecheckout>
+            </updates>
+        </layout>
+        <routers>
+            <checkout>
+                <args>
+                    <modules>
+                        <Icube_Singlepagecheckout before="Mage_Checkout">Icube_Singlepagecheckout</Icube_Singlepagecheckout>
+                    </modules>
+                </args>
+            </checkout>
+        </routers>
+    </frontend>
+    <default>
+        <checkout>
+            <options>
+                <singlepagecheckout_enabled>0</singlepagecheckout_enabled>
+            </options>
+        </checkout>
+    </default>
+</config>
