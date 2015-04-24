@@ -24,13 +24,6 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="page-title">
-    <h1><?php echo $this->__('Checkout') ?></h1>
-</div>
-<script type="text/javascript" src="<?php echo $this->getJsUrl('varien/accordion.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/opcheckout.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/opcheckout_rwd.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/icube_customcheckout.js') ?>"></script>
 <?php /* get configs */ ?>
 <?php $isCustomEnabled = Mage::getStoreConfig('icube/option/customcheckout_enabled',Mage::app()->getStore()); ?>
 <?php $isSkipBill = Mage::getStoreConfig('icube/option/customcheckout_skipbilling',Mage::app()->getStore()); ?>
@@ -41,6 +34,23 @@
 <?php $labels['shipping_method'] = Mage::getStoreConfig('icube/option/method_label',Mage::app()->getStore()); ?>
 <?php $labels['payment'] = Mage::getStoreConfig('icube/option/payment_label',Mage::app()->getStore()); ?>
 <?php $labels['review'] = Mage::getStoreConfig('icube/option/review_label',Mage::app()->getStore()); ?>
+<div class="page-title">
+    <h1><?php echo $this->__('Checkout') ?></h1>
+</div>
+<script type="text/javascript" src="<?php echo $this->getJsUrl('varien/accordion.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/opcheckout.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/opcheckout_rwd.js') ?>"></script>
+<?php /* check whether skip billing */ ?>
+<?php if( $isCustomEnabled && $isSkipBill ) :?>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/customcheckout_skipbilling.js') ?>"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery(document).ready(function(){
+	billing.beforeSkipBilling();
+});
+//]]>
+</script>
+<?php endif; ?>
 <ol class="opc opc-firststep-<?php echo $this->getActiveStep() ?>" id="checkoutSteps">
 <?php $i=0; foreach($this->getSteps() as $_stepId => $_stepInfo): ?>
 <?php if (!$this->getChild($_stepId) || !$this->getChild($_stepId)->isShow()): continue; endif; $i++; ?>
@@ -74,13 +84,3 @@
     );
 //]]>
 </script>
-<?php /* check whether skip billing */ ?>
-<?php if( $isCustomEnabled && $isSkipBill ) :?>
-<script type="text/javascript">
-//<![CDATA[
-jQuery(document).ready(function(){
-	billing.beforeSkipBilling();
-});
-//]]>
-</script>
-<?php endif; ?>
