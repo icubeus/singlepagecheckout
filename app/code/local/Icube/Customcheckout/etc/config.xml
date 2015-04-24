@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Icube_Customcheckout>
+			<version>0.1.0</version>
+		</Icube_Customcheckout>
+	</modules>
+	<frontend>
+        <layout>
+            <updates>
+                <customcheckout>
+                    <file>icube/customcheckout.xml</file>
+                </customcheckout>
+            </updates>
+        </layout>        
+    </frontend>
+	<global>
+		<helpers>
+			<customcheckout>
+				<class>Icube_Customcheckout_Helper</class>
+			</customcheckout>
+		</helpers>
+	</global>
+	<adminhtml>
+	    <acl>
+	        <resources>
+	            <all>
+	                <title>Allow Everything</title>
+	            </all>
+	            <admin>
+	                <children>
+	                    <system>
+	                        <children>
+	                            <config>
+	                                <children>
+	                                    <icube>
+	                                        <title>Icube - All</title>
+	                                    </icube>
+	                                </children>
+	                            </config>
+	                        </children>
+	                    </system>
+	                </children>
+	            </admin>
+	        </resources>
+	    </acl>
+    </adminhtml>
+    <default>
+        <icube>
+            <option>
+                <customcheckout_enabled>1</customcheckout_enabled>
+                <customcheckout_skipbilling>1</customcheckout_skipbilling>
+                <customcheckout_skishippingmethod>1</customcheckout_skishippingmethod>
+                <login_label>Login</login_label>
+                <billing_label>Billing Information</billing_label>
+                <shipping_label>Shipping Information</shipping_label>
+                <method_label>Shipping Method</method_label>
+                <payment_label>Payment Method</payment_label>
+                <review_label>Review</review_label>
+            </option>
+        </icube>
+    </default>
+</config>
