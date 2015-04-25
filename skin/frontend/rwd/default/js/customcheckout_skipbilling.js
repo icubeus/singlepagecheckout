@@ -117,11 +117,12 @@ Billing.prototype.skipBilling = function(){
 }
 
 /* Icube Custom - copy shipping to billing then save shipping */   
-Shipping.prototype.save = function(){
+Shipping.prototype.save = function(){console.log('bill');
         if (checkout.loadWaiting!=false) return;
         var validator = new Validation(this.form);
         if (validator.validate()) {
             checkout.setLoadWaiting('shipping');
+            /* call copy shipping to billing */
             this.copyShippingtoBilling();
             var request = new Ajax.Request(
                 this.saveUrl,

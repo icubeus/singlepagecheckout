@@ -27,6 +27,7 @@
 <?php /* get configs */ ?>
 <?php $isCustomEnabled = Mage::getStoreConfig('icube/option/customcheckout_enabled',Mage::app()->getStore()); ?>
 <?php $isSkipBill = Mage::getStoreConfig('icube/option/customcheckout_skipbilling',Mage::app()->getStore()); ?>
+<?php $isSkipMethod = Mage::getStoreConfig('icube/option/customcheckout_skishippingmethod',Mage::app()->getStore()); ?>
 <?php $labels = array(); ?>
 <?php $labels['login'] = Mage::getStoreConfig('icube/option/login_label',Mage::app()->getStore()); ?>
 <?php $labels['billing'] = Mage::getStoreConfig('icube/option/billing_label',Mage::app()->getStore()); ?>
@@ -51,14 +52,25 @@ jQuery(document).ready(function(){
 //]]>
 </script>
 <?php endif; ?>
+<?php /* check whether skip shipping method */ ?>
+<?php if( $isCustomEnabled && $isSkipMethod ) :?>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/customcheckout_skipmethod.js') ?>"></script>
+<script type="text/javascript">
+//<![CDATA[
+jQuery(document).ready(function(){
+	shippingMethod.beforeSkipMethod();
+});
+//]]>
+</script>
+<?php endif; ?>
 <ol class="opc opc-firststep-<?php echo $this->getActiveStep() ?>" id="checkoutSteps">
 <?php $i=0; foreach($this->getSteps() as $_stepId => $_stepInfo): ?>
 <?php if (!$this->getChild($_stepId) || !$this->getChild($_stepId)->isShow()): continue; endif; $i++; ?>
     <li id="opc-<?php echo $_stepId ?>" class="section<?php echo !empty($_stepInfo['allow'])?' allow':'' ?><?php echo !empty($_stepInfo['complete'])?' saved':'' ?>">
         <div class="step-title">
             <span class="number">
-            <?php /* check whether skip billing and decrease the number */?>
-            <?php if( $isCustomEnabled && $isSkipBill && $_stepId == 'billing') : ?>
+            <?php /* check whether skip billing OR skipp shipping method and decrease the number */?>
+            <?php if( ($isCustomEnabled && $isSkipBill && $_stepId == 'billing') || ($isCustomEnabled && $isSkipMethod && $_stepId == 'shipping_method')) : ?>
             <?php $i--;?><?php endif; ?><?php echo $i ?></span>
             <?php /* get the label from config */?>
             <h2><?php if($labels[$_stepId]): echo $labels[$_stepId]; ?><?php else : ?><?php echo $_stepInfo['label'] ?><?php endif; ?></h2>
