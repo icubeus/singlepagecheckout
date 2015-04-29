@@ -23,4 +23,11 @@ One page checkout main layout
             </action>
         </reference>
     </checkout_onepage_index>
+    <checkout_onepage_review translate="label">
+    	<reference name="root">
+    		<action method="setTemplate">
+                <template>customcheckout/onepage/review/info.phtml</template>
+            </action>
+    	</reference>
+    </checkout_onepage_review>
 </layout>

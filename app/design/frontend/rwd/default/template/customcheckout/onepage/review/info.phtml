@@ -24,6 +24,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php /* get configs */ ?>
+<?php $isCustomEnabled = Mage::getStoreConfig('icube/option/customcheckout_enabled',Mage::app()->getStore()); ?>
+<?php $isSkipReview = Mage::getStoreConfig('icube/option/customcheckout_skipreview',Mage::app()->getStore()); ?>
 <?php echo $this->getChildHtml('items_before'); ?>
 <div id="checkout-review-table-wrapper">
     <table class="data-table linearize-table" id="checkout-review-table">
@@ -79,6 +82,10 @@
     <script type="text/javascript">
     //<![CDATA[
         review = new Review('<?php echo $this->getUrl('checkout/onepage/saveOrder', array('form_key' => Mage::getSingleton('core/session')->getFormKey())) ?>', '<?php echo $this->getUrl('checkout/onepage/success') ?>', $('checkout-agreements'));
+        <?php /* check whether skip review */ ?>
+        <?php if( $isCustomEnabled && $isSkipReview ) :?>
+        	review.save();
+        <?php endif; ?>
     //]]>
     </script>
 </div>
