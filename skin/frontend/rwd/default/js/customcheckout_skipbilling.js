@@ -172,7 +172,6 @@ Shipping.prototype.copyShippingtoBilling = function(){
 		a++;
 	});
 	
-	billingRegionUpdater.update();
 	jQuery('#billing\\:region_id').val(jQuery('#shipping\\:region_id').val());
     jQuery('#billing\\:region').val(jQuery('#shipping\\:region').val());
 	billing.saveSkipNext();
