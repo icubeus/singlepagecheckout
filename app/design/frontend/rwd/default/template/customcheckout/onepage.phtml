@@ -28,6 +28,7 @@
 <?php $isCustomEnabled = Mage::getStoreConfig('icube/option/customcheckout_enabled',Mage::app()->getStore()); ?>
 <?php $isSkipBill = Mage::getStoreConfig('icube/option/customcheckout_skipbilling',Mage::app()->getStore()); ?>
 <?php $isSkipMethod = Mage::getStoreConfig('icube/option/customcheckout_skishippingmethod',Mage::app()->getStore()); ?>
+<?php $isSkipReview = Mage::getStoreConfig('icube/option/customcheckout_skipreview',Mage::app()->getStore()); ?>
 <?php $labels = array(); ?>
 <?php $labels['login'] = Mage::getStoreConfig('icube/option/login_label',Mage::app()->getStore()); ?>
 <?php $labels['billing'] = Mage::getStoreConfig('icube/option/billing_label',Mage::app()->getStore()); ?>
@@ -63,6 +64,21 @@ jQuery(document).ready(function(){
 //]]>
 </script>
 <?php endif; ?>
+
+<?php /* check whether skip review */ ?>
+<?php if( $isCustomEnabled && $isSkipReview ) :?>
+<script type="text/javascript">
+//<![CDATA[
+jQuery(document).ready(function(){
+	document.getElementById('checkout-step-review').style.display = 'none';
+	document.getElementById('opc-review').style.display = 'none';
+	jQuery('#payment-buttons-container .back-link').css('display','none');
+	jQuery('#payment-buttons-container .button span span').text('Place Order');
+});
+//]]>
+</script>
+<?php endif; ?>
+
 <ol class="opc opc-firststep-<?php echo $this->getActiveStep() ?>" id="checkoutSteps">
 <?php $i=0; foreach($this->getSteps() as $_stepId => $_stepInfo): ?>
 <?php if (!$this->getChild($_stepId) || !$this->getChild($_stepId)->isShow()): continue; endif; $i++; ?>
