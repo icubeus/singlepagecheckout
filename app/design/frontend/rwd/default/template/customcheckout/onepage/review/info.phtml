@@ -24,9 +24,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php /* get customer session */ ?>
+<?php $groupId = Mage::getSingleton('customer/session')->getCustomer()->getGroupId(); ?>
 <?php /* get configs */ ?>
 <?php $isCustomEnabled = Mage::getStoreConfig('icube/option/customcheckout_enabled',Mage::app()->getStore()); ?>
-<?php $isSkipReview = Mage::getStoreConfig('icube/option/customcheckout_skipreview',Mage::app()->getStore()); ?>
+<?php $isSkipReview = Mage::getStoreConfig('icube/review/customcheckout_skipreview',Mage::app()->getStore()); ?>
+<?php $groupSkipForReview = explode(',', Mage::getStoreConfig('icube/review/customcheckout_review_group',Mage::app()->getStore()) ); ?>
 <?php echo $this->getChildHtml('items_before'); ?>
 <div id="checkout-review-table-wrapper">
     <table class="data-table linearize-table" id="checkout-review-table">
@@ -83,7 +86,7 @@
     //<![CDATA[
         review = new Review('<?php echo $this->getUrl('checkout/onepage/saveOrder', array('form_key' => Mage::getSingleton('core/session')->getFormKey())) ?>', '<?php echo $this->getUrl('checkout/onepage/success') ?>', $('checkout-agreements'));
         <?php /* check whether skip review */ ?>
-        <?php if( $isCustomEnabled && $isSkipReview ) :?>
+        <?php if( $isCustomEnabled && $isSkipReview && in_array($groupId, $groupSkipForReview)) :?>
         	review.save();
         <?php endif; ?>
     //]]>

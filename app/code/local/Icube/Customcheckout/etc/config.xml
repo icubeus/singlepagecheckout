@@ -49,9 +49,6 @@
         <icube>
             <option>
                 <customcheckout_enabled>1</customcheckout_enabled>
-                <customcheckout_skipbilling>1</customcheckout_skipbilling>
-                <customcheckout_skishippingmethod>1</customcheckout_skishippingmethod>
-                <customcheckout_skipreview>1</customcheckout_skipreview>
                 <login_label>Login</login_label>
                 <billing_label>Billing Information</billing_label>
                 <shipping_label>Shipping Information</shipping_label>
@@ -59,6 +56,9 @@
                 <payment_label>Payment Method</payment_label>
                 <review_label>Review</review_label>
             </option>
+            <billing><customcheckout_skipbilling>1</customcheckout_skipbilling></billing>
+            <method><customcheckout_skishippingmethod>1</customcheckout_skishippingmethod></method>
+            <review><customcheckout_skipreview>1</customcheckout_skipreview></review>
         </icube>
     </default>
 </config>

@@ -24,11 +24,18 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php /* get customer session */ ?>
+<?php $groupId = Mage::getSingleton('customer/session')->getCustomer()->getGroupId(); ?>
 <?php /* get configs */ ?>
 <?php $isCustomEnabled = Mage::getStoreConfig('icube/option/customcheckout_enabled',Mage::app()->getStore()); ?>
-<?php $isSkipBill = Mage::getStoreConfig('icube/option/customcheckout_skipbilling',Mage::app()->getStore()); ?>
-<?php $isSkipMethod = Mage::getStoreConfig('icube/option/customcheckout_skishippingmethod',Mage::app()->getStore()); ?>
-<?php $isSkipReview = Mage::getStoreConfig('icube/option/customcheckout_skipreview',Mage::app()->getStore()); ?>
+<?php $isSkipBill = Mage::getStoreConfig('icube/billing/customcheckout_skipbilling',Mage::app()->getStore()); ?>
+<?php $isSkipMethod = Mage::getStoreConfig('icube/method/customcheckout_skishippingmethod',Mage::app()->getStore()); ?>
+<?php $isSkipReview = Mage::getStoreConfig('icube/review/customcheckout_skipreview',Mage::app()->getStore()); ?>
+<?php /* get customer group configs */ ?>
+<?php $groupSkipForBilling = explode(',', Mage::getStoreConfig('icube/billing/customcheckout_skipbilling_group',Mage::app()->getStore()) ); ?>
+<?php $groupSkipForMethod = explode(',', Mage::getStoreConfig('icube/method/customcheckout_skishippingmethod_group',Mage::app()->getStore()) ); ?>
+<?php $groupSkipForReview = explode(',', Mage::getStoreConfig('icube/review/customcheckout_review_group',Mage::app()->getStore()) ); ?>
+<?php /* get labels */ ?>
 <?php $labels = array(); ?>
 <?php $labels['login'] = Mage::getStoreConfig('icube/option/login_label',Mage::app()->getStore()); ?>
 <?php $labels['billing'] = Mage::getStoreConfig('icube/option/billing_label',Mage::app()->getStore()); ?>
@@ -43,7 +50,7 @@
 <script type="text/javascript" src="<?php echo $this->getSkinUrl('js/opcheckout.js') ?>"></script>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl('js/opcheckout_rwd.js') ?>"></script>
 <?php /* check whether skip billing */ ?>
-<?php if( $isCustomEnabled && $isSkipBill ) :?>
+<?php if( $isCustomEnabled && $isSkipBill && in_array($groupId, $groupSkipForBilling) ) :?>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl('js/customcheckout_skipbilling.js') ?>"></script>
 <script type="text/javascript">
 //<![CDATA[
@@ -54,7 +61,7 @@ jQuery(document).ready(function(){
 </script>
 <?php endif; ?>
 <?php /* check whether skip shipping method */ ?>
-<?php if( $isCustomEnabled && $isSkipMethod ) :?>
+<?php if( $isCustomEnabled && $isSkipMethod && in_array($groupId, $groupSkipForMethod) ) :?>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl('js/customcheckout_skipmethod.js') ?>"></script>
 <script type="text/javascript">
 //<![CDATA[
@@ -66,7 +73,7 @@ jQuery(document).ready(function(){
 <?php endif; ?>
 
 <?php /* check whether skip review */ ?>
-<?php if( $isCustomEnabled && $isSkipReview ) :?>
+<?php if( $isCustomEnabled && $isSkipReview && in_array($groupId, $groupSkipForReview)) :?>
 <script type="text/javascript">
 //<![CDATA[
 jQuery(document).ready(function(){
@@ -85,8 +92,8 @@ jQuery(document).ready(function(){
     <li id="opc-<?php echo $_stepId ?>" class="section<?php echo !empty($_stepInfo['allow'])?' allow':'' ?><?php echo !empty($_stepInfo['complete'])?' saved':'' ?>">
         <div class="step-title">
             <span class="number">
-            <?php /* check whether skip billing OR skipp shipping method and decrease the number */?>
-            <?php if( ($isCustomEnabled && $isSkipBill && $_stepId == 'billing') || ($isCustomEnabled && $isSkipMethod && $_stepId == 'shipping_method')) : ?>
+            <?php /* check whether skip billing OR skip shipping method and decrease the number */?>
+            <?php if( ($isCustomEnabled && $isSkipBill && $_stepId == 'billing' && in_array($groupId, $groupSkipForBilling)) || ($isCustomEnabled && $isSkipMethod && $_stepId == 'shipping_method' && in_array($groupId, $groupSkipForMethod)) ) : ?>
             <?php $i--;?><?php endif; ?><?php echo $i ?></span>
             <?php /* get the label from config */?>
             <h2><?php if($labels[$_stepId]): echo $labels[$_stepId]; ?><?php else : ?><?php echo $_stepInfo['label'] ?><?php endif; ?></h2>

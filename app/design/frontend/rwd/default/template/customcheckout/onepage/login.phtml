@@ -71,13 +71,16 @@
         <?php else: ?>
             <input type="hidden" name="checkout_method" id="login:register" value="register" checked="checked" />
         <?php endif; ?>
+        <?php /* get customer session */ ?>
+        <?php $groupId = Mage::getSingleton('customer/session')->getCustomer()->getGroupId(); ?>
         <?php /* get configs */ ?>
 		<?php $isCustomEnabled = Mage::getStoreConfig('icube/option/customcheckout_enabled',Mage::app()->getStore()); ?>
-		<?php $isSkipBill = Mage::getStoreConfig('icube/option/customcheckout_skipbilling',Mage::app()->getStore()); ?>
+		<?php $isSkipBill = Mage::getStoreConfig('icube/billing/customcheckout_skipbilling',Mage::app()->getStore()); ?>
+		<?php $groupSkipForBilling = explode(',', Mage::getStoreConfig('icube/billing/customcheckout_skipbilling_group',Mage::app()->getStore()) ); ?>
         <div class="buttons-set">
             <p class="required">&nbsp;</p>
             <?php if ($this->getQuote()->isAllowedGuestCheckout()): ?>
-                <button id="onepage-guest-register-button" type="button" class="button" onclick="checkout.setMethod(); <?php if( $isCustomEnabled && $isSkipBill ) : echo "billing.skipBilling();" ?><?php endif; ?>"><span><span><?php echo $this->__('Continue') ?></span></span></button>
+                <button id="onepage-guest-register-button" type="button" class="button" onclick="checkout.setMethod(); <?php if( $isCustomEnabled && $isSkipBill && in_array($groupId, $groupSkipForBilling) ) : echo "billing.skipBilling();" ?><?php endif; ?>"><span><span><?php echo $this->__('Continue') ?></span></span></button>
             <?php elseif ($this->helper('checkout')->isCustomerMustBeLogged()): ?>
                 <button id="onepage-guest-register-button" type="button" class="button" onclick="window.location='<?php echo $this->helper('checkout/url')->getRegistrationUrl();?>'"><span><span><?php echo $this->__('Register') ?></span></span></button>
             <?php else: ?>
