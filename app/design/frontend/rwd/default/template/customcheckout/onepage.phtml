@@ -36,6 +36,8 @@
 <?php $labels['shipping_method'] = Mage::getStoreConfig('icube/option/method_label',Mage::app()->getStore()); ?>
 <?php $labels['payment'] = Mage::getStoreConfig('icube/option/payment_label',Mage::app()->getStore()); ?>
 <?php $labels['review'] = Mage::getStoreConfig('icube/option/review_label',Mage::app()->getStore()); ?>
+<?php /* get active shipping methods */ ?>
+<?php $activeCarriers = count(Mage::getSingleton('shipping/config')->getActiveCarriers()); ?>
 <div class="page-title">
     <h1><?php echo $this->__('Checkout') ?></h1>
 </div>
@@ -54,7 +56,7 @@ jQuery(document).ready(function(){
 </script>
 <?php endif; ?>
 <?php /* check whether skip shipping method */ ?>
-<?php if( $isCustomEnabled && $isSkipMethod ) :?>
+<?php if( $isCustomEnabled && $isSkipMethod && $activeCarriers == 1 ) :?>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl('js/customcheckout_skipmethod.js') ?>"></script>
 <script type="text/javascript">
 //<![CDATA[
@@ -85,8 +87,8 @@ jQuery(document).ready(function(){
     <li id="opc-<?php echo $_stepId ?>" class="section<?php echo !empty($_stepInfo['allow'])?' allow':'' ?><?php echo !empty($_stepInfo['complete'])?' saved':'' ?>">
         <div class="step-title">
             <span class="number">
-            <?php /* check whether skip billing OR skipp shipping method and decrease the number */?>
-            <?php if( ($isCustomEnabled && $isSkipBill && $_stepId == 'billing') || ($isCustomEnabled && $isSkipMethod && $_stepId == 'shipping_method')) : ?>
+            <?php /* check whether skip billing OR skip shipping method and decrease the number */?>
+            <?php if( ($isCustomEnabled && $isSkipBill && $_stepId == 'billing') || ($isCustomEnabled && $isSkipMethod && $_stepId == 'shipping_method' && $activeCarriers == 1) ) : ?>
             <?php $i--;?><?php endif; ?><?php echo $i ?></span>
             <?php /* get the label from config */?>
             <h2><?php if($labels[$_stepId]): echo $labels[$_stepId]; ?><?php else : ?><?php echo $_stepInfo['label'] ?><?php endif; ?></h2>
